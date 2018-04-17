@@ -4,7 +4,7 @@ pipeline:
     volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
     repo: alpine-dev
     build_args:
-      - ALPINE_TAG=${ALPINE_TAG}
+      - ALPINE_TAG=${ALPINE_TAG%%,*}
 
   test:
     image: docker
@@ -18,7 +18,8 @@ pipeline:
     volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
     secrets: [ docker_username, docker_password, microbadger_token ]
     from: alpine-dev
-    repo: 'spritsail/alpine:${ALPINE_TAG}'
+    repo: 'spritsail/alpine'
+    tags: ${ALPINE_TAG}
 
   notify:
     image: spritsail/notify
@@ -30,6 +31,5 @@ matrix:
     - 3.4
     - 3.5
     - 3.6
-    - 3.7
-    - latest
+    - 3.7,latest
     - edge
