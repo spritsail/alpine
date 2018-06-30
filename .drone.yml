@@ -18,8 +18,7 @@ pipeline:
     volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
     secrets: [ docker_username, docker_password, microbadger_token ]
     from: alpine-dev
-    repo: 'spritsail/alpine'
-    tags: ${ALPINE_TAG}
+    repo: 'spritsail/alpine:3.8'
 
   notify:
     image: spritsail/notify
