@@ -1,7 +1,17 @@
 ARG SU_EXEC_VER=v0.3
 ARG ALPINE_TAG=3.8
 
-FROM alpine:$ALPINE_TAG
+FROM alpine:3.7 AS upgrade
+
+ARG ALPINE_TAG
+RUN sed -i "s/3\.7/${ALPINE_TAG}/g" /etc/apk/repositories \
+ && apk --no-cache upgrade
+
+# ~~~~~~~~~~~~~~~~~~~~~~
+
+FROM scratch
+
+COPY --from=upgrade / /
 
 ARG SU_EXEC_VER
 ARG ALPINE_TAG

@@ -4,7 +4,7 @@ pipeline:
     volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
     repo: alpine-dev
     build_args:
-      - ALPINE_TAG=${ALPINE_TAG%%,*}
+      - ALPINE_TAG=3.8
 
   test:
     image: docker
@@ -14,7 +14,7 @@ pipeline:
 
   publish:
     image: spritsail/docker-publish
-    when: { branch: [ master ], event: [ push, tag, deployment ] }
+    when: { branch: [ 3.8 ], event: [ push, tag, deployment ] }
     volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
     secrets: [ docker_username, docker_password, microbadger_token ]
     from: alpine-dev
@@ -25,12 +25,3 @@ pipeline:
     image: spritsail/notify
     when: { status: [ success, failure ] }
     secrets: [ webhook_url, notify_token ]
-
-matrix:
-  ALPINE_TAG:
-    - 3.4
-    - 3.5
-    - 3.6
-    - 3.7
-    - 3.8,latest
-    - edge
