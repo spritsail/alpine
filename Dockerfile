@@ -23,7 +23,7 @@ RUN apk --no-cache add \
         tini \
         openssl \
  && wget -qO /sbin/su-exec https://github.com/frebib/su-exec/releases/download/${SU_EXEC_VER}/su-exec-alpine-$(uname -m) \
- && chmod +x /sbin/su-exec /usr/bin/* \
+ && chmod +x /sbin/su-exec \
  && apk --no-cache del openssl
 
 ENTRYPOINT ["/sbin/tini" , "--"]
