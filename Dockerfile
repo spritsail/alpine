@@ -1,4 +1,4 @@
-ARG SU_EXEC_VER=v0.3
+ARG SU_EXEC_VER=0.3
 ARG ALPINE_TAG=3.8
 
 FROM alpine:$ALPINE_TAG
@@ -22,7 +22,7 @@ ENV ENV="/etc/profile"
 RUN apk --no-cache add \
         tini \
         libressl \
- && wget -qO /sbin/su-exec https://github.com/frebib/su-exec/releases/download/${SU_EXEC_VER}/su-exec-alpine-$(uname -m) \
+ && wget -qO /sbin/su-exec https://github.com/frebib/su-exec/releases/download/v${SU_EXEC_VER}/su-exec-alpine-$(uname -m) \
  && chmod +x /sbin/su-exec \
  && apk --no-cache del openssl
 
