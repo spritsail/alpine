@@ -15,9 +15,10 @@ LABEL maintainer="Spritsail <alpine@spritsail.io>" \
 SHELL ["/bin/sh", "-exc"]
 
 COPY skel/ /
+ADD https://alpine.spritsail.io/spritsail-alpine.rsa.pub /etc/apk/keys
+
 ENV ENV="/etc/profile"
 RUN sed -i '1ihttp://alpine.spritsail.io/spritsail' /etc/apk/repositories \
- && wget -P /etc/apk/keys https://alpine.spritsail.io/spritsail-alpine.rsa.pub \
  && apk --no-cache add \
         su-exec \
         tini
