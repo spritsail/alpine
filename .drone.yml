@@ -16,7 +16,7 @@ pipeline:
     image: spritsail/docker-publish
     when: { branch: [ master ], event: [ push, tag, deployment ] }
     volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
-    secrets: [ docker_username, docker_password, microbadger_token ]
+    secrets: [ docker_username, docker_password ]
     from: alpine-dev
     repo: 'spritsail/alpine'
     tags: ${ALPINE_TAG}
