@@ -7,10 +7,10 @@ pipeline:
       - ALPINE_TAG=${ALPINE_TAG%%,*}
 
   test:
-    image: docker
+    image: spritsail/docker-test
     volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
-    commands:
-      - docker run --rm alpine-dev /bin/sh -xec 'apk --version'
+    repo: alpine-dev
+    run: su-exec nobody apk --version
 
   publish:
     image: spritsail/docker-publish
