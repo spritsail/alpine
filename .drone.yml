@@ -29,8 +29,8 @@ pipeline:
 
 matrix:
   ALPINE_TAG:
-    - 3.6
     - 3.7
     - 3.8
-    - 3.9,latest
+    - 3.9
+    - 3.10,latest
     - edge
