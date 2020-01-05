@@ -63,6 +63,9 @@ def notify(versions):
     "kind": "pipeline",
     "name": "notify",
     "depends_on": versions,
+    "when": {
+      "status": [ "success", "failure" ],
+    },
     "steps": [
       {
         "name": "notify",
@@ -74,9 +77,6 @@ def notify(versions):
           "NOTIFY_TOKEN": {
             "from_secret": "notify_token",
           },
-        },
-        "when": {
-          "status": [ "success", "failure" ],
         },
       },
     ],
