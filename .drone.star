@@ -1,10 +1,11 @@
 def main(ctx):
-  return [
-    step("3.9"),
-    step("3.10"),
-    step("3.11", ["latest"]),
-    step("edge"),
+  versions = [
+    ["3.9",[]],
+    ["3.10",[]],
+    ["3.11", ["latest"]],
+    ["edge", []],
   ]
+  return [step(v[0], v[1]) for v in versions] + [notify(["build-%s" % v for v, _ in versions])]
 
 def step(alpinever,tags=[]):
   return {
@@ -19,8 +20,8 @@ def step(alpinever,tags=[]):
           "repo": "alpine-dev-%s" % alpinever,
           "build_args": [
             "ALPINE_TAG=%s" % alpinever,
-          ]
-        }
+          ],
+        },
       },
       {
         "name": "test",
@@ -29,7 +30,7 @@ def step(alpinever,tags=[]):
         "settings": {
           "repo": "spritsail/alpine",
           "run": "su-exec nobody apk --version",
-        }
+        },
       },
       {
         "name": "publish",
@@ -46,13 +47,36 @@ def step(alpinever,tags=[]):
           },
           "DOCKER_PASSWORD": {
             "from_secret": "docker_password",
-          }
+          },
         },
         "when": {
           "branch": ["master"],
           "event": ["push"],
-        }
-      }
+        },
+      },
     ]
   }
 
+def notify(versions):
+  return {
+    "kind": "pipeline",
+    "name": "notify",
+    "depends_on": versions,
+    "steps": [
+      {
+        "name": "notify",
+        "image": "spritsail/notify",
+        "environment": {
+          "WEBHOOK_URL": {
+            "from_secret": "webhook_url",
+          },
+          "NOTIFY_TOKEN": {
+            "from_secret": "notify_token",
+          },
+        },
+        "when": {
+          "status": [ "success", "failure" ],
+        },
+      },
+    ],
+  }
