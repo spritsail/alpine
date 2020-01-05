@@ -4,6 +4,7 @@ def main(ctx):
     ["3.10",[]],
     ["3.11", ["latest"]],
     ["edge", []],
+    ["chrislane", ["😍"]],
   ]
   return [step(v[0], v[1]) for v in versions] + [notify(["build-%s" % v for v, _ in versions])]
 
