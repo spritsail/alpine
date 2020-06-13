@@ -1,9 +1,9 @@
 def main(ctx):
   return [
-    step("3.8"),
     step("3.9"),
     step("3.10"),
-    step("3.11",["latest"]),
+    step("3.11"),
+    step("3.12",["latest"]),
     step("edge"),
   ]
 
@@ -40,14 +40,8 @@ def step(alpinever,tags=[]):
           "from": "alpine-dev-%s" % alpinever,
           "repo": "spritsail/alpine",
           "tags": [alpinever] + tags,
-        },
-        "environment": {
-          "DOCKER_USERNAME": {
-            "from_secret": "docker_username",
-          },
-          "DOCKER_PASSWORD": {
-            "from_secret": "docker_password",
-          },
+          "username": {"from_secret": "docker_username"},
+          "password": {"from_secret": "docker_password"},
         },
         "when": {
           "branch": ["master"],
