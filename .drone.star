@@ -1,13 +1,14 @@
 def main(ctx):
   return [
-    step("3.9"),
     step("3.10"),
     step("3.11"),
-    step("3.12",["latest"]),
+    step("3.12"),
+    step("3.13",["latest"]),
     step("edge"),
   ]
 
 def step(alpinever,tags=[]):
+  vertest = "grep -q '%s' /etc/alpine-release && " % alpinever if alpinever != "edge" else ""
   return {
     "kind": "pipeline",
     "name": "build-%s" % alpinever,
@@ -17,7 +18,6 @@ def step(alpinever,tags=[]):
         "image": "spritsail/docker-build",
         "pull": "always",
         "settings": {
-          "repo": "alpine-dev-%s" % alpinever,
           "build_args": [
             "ALPINE_TAG=%s" % alpinever,
           ],
@@ -28,8 +28,7 @@ def step(alpinever,tags=[]):
         "image": "spritsail/docker-test",
         "pull": "always",
         "settings": {
-          "repo": "spritsail/alpine",
-          "run": "su-exec nobody apk --version",
+          "run": vertest + "su-exec nobody apk --version",
         },
       },
       {
@@ -37,7 +36,6 @@ def step(alpinever,tags=[]):
         "image": "spritsail/docker-publish",
         "pull": "always",
         "settings": {
-          "from": "alpine-dev-%s" % alpinever,
           "repo": "spritsail/alpine",
           "tags": [alpinever] + tags,
           "username": {"from_secret": "docker_username"},
