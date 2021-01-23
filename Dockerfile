@@ -18,7 +18,7 @@ COPY skel/ /
 ADD https://alpine.spritsail.io/spritsail-alpine.rsa.pub /etc/apk/keys
 
 ENV ENV="/etc/profile"
-RUN sed -i '1ihttp://alpine.spritsail.io/spritsail' /etc/apk/repositories \
+RUN sed -i '1ihttps://alpine.spritsail.io/spritsail' /etc/apk/repositories \
  && apk --no-cache add \
         su-exec \
         tini
