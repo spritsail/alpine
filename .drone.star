@@ -1,9 +1,7 @@
 def main(ctx):
   return [
-    step("3.12"),
-    step("3.13"),
-    step("3.14"),
-    step("3.15",["latest"]),
+    step("3.15"),
+    step("3.16",["latest"]),
     step("edge"),
   ]
 
