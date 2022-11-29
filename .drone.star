@@ -2,9 +2,9 @@ repo = "spritsail/alpine"
 archs = ["amd64", "arm64"]
 branches = ["master"]
 versions = {
-  "3.14": [],
   "3.15": [],
-  "3.16": ["latest"],
+  "3.16": [],
+  "3.17": ["latest"],
   "edge": [],
 }
 
