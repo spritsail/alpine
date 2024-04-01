@@ -4,12 +4,12 @@ FROM alpine:$ALPINE_TAG
 
 ARG ALPINE_TAG
 
-LABEL maintainer="Spritsail <alpine@spritsail.io>" \
-      org.label-schema.vendor="Spritsail" \
-      org.label-schema.name="Alpine Linux" \
-      org.label-schema.url="https://github.com/gliderlabs/docker-alpine" \
-      org.label-schema.description="Alpine Linux base image" \
-      org.label-schema.version=${ALPINE_TAG}
+LABEL org.opencontainers.image.authors="Spritsail <alpine@spritsail.io>" \
+      org.opencontainers.image.title="Alpine Linux" \
+      org.opencontainers.image.url="https://github.com/gliderlabs/docker-alpine" \
+      org.opencontainers.image.source="https://github.com/spritsail/alpine" \
+      org.opencontainers.image.description="Alpine Linux base image" \
+      org.opencontainers.image.version=${ALPINE_TAG}
 
 # Override shell for sh-y debugging goodness
 SHELL ["/bin/sh", "-exc"]
