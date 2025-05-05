@@ -18,7 +18,7 @@ def main(ctx):
       depends_on.append(key)
 
     if ctx.build.branch in branches:
-      builds.append(publish(ver, depends_on, tags))
+      builds.extend(publish(ver, depends_on, tags))
 
   return builds
 
@@ -71,34 +71,42 @@ def step(ver, arch, key):
   }
 
 def publish(ver, depends, tags=[]):
-  return {
-    "kind": "pipeline",
-    "name": "publish-%s" % ver,
-    "depends_on": depends,
-    "platform": {
-      "os": "linux",
-    },
-    "environment": {
-      "DOCKER_IMAGE_TOKEN": ver,
-    },
-    "steps": [
-      {
-        "name": "publish",
-        "image": "spritsail/docker-multiarch-publish",
-        "pull": "always",
-        "settings": {
-          "src_registry": {"from_secret": "registry_url"},
-          "src_login": {"from_secret": "registry_login"},
-          "dest_repo": repo,
-          "dest_login": {"from_secret": "docker_login"},
-          "tags": [ver] + tags,
-        },
-        "when": {
-          "branch": branches,
-          "event": ["push", "cron"],
-        },
+  return [
+    {
+      "kind": "pipeline",
+      "name": "publish-%s-%s" % (ver, name),
+      "depends_on": depends,
+      "platform": {
+        "os": "linux",
       },
+      "environment": {
+        "DOCKER_IMAGE_TOKEN": ver,
+      },
+      "steps": [
+        {
+          "name": "publish",
+          "image": "spritsail/docker-multiarch-publish",
+          "pull": "always",
+          "settings": {
+            "src_registry": {"from_secret": "registry_url"},
+            "src_login": {"from_secret": "registry_login"},
+            "dest_registry": registry,
+            "dest_repo": repo,
+            "dest_login": {"from_secret": login_secret},
+            "tags": [ver] + tags,
+          },
+          "when": {
+            "branch": branches,
+            "event": ["push", "cron"],
+          },
+        },
+      ],
+    }
+    for name, registry, login_secret in [
+      ("dockerhub", "index.docker.io", "docker_login"),
+      ("spritsail", "registry.spritsail.io", "spritsail_login"),
+      ("ghcr", "ghcr.io", "ghcr_login"),
     ]
-  }
+  ]
 
 # vim: ft=python sw=2
